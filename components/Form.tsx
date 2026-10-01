@@ -50,7 +50,7 @@ export default function FormComponet({
       validationSchema={registerSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
-          await addDoc(collection(db, "HP-SMB"), {
+          await addDoc(collection(db, "HP-60"), {
             fecha: Date.now(),
             ...values,
           })
@@ -74,42 +74,46 @@ export default function FormComponet({
           resetForm()
           setEnviado(true)
         } catch (error) {
-          console.error("Error al guardar registro:", error)
+          console.log(error)
         } finally {
           setSubmitting(false)
         }
       }}
     >
-      {({ errors, touched, isSubmitting }) => (
+      {({ errors, isSubmitting }) => (
         <Form
           className="
             w-full
-            lg:w-2/3
-            min-h-screen
+            md:w-2/3
+
+            md:h-screen
+            md:overflow-y-auto
+
             flex
             flex-col
-            justify-between
+
+            pt-5
+            pb-5
+
+            px-4
+            sm:px-6
+            md:px-8
+            lg:px-10
+
             font-formaMicro
-            px-5
-            sm:px-8
-            md:px-10
-            lg:px-12
-            xl:px-16
-            py-6
-            sm:py-8
-            lg:py-10
+
+            overflow-x-hidden
           "
         >
           {/* Campos */}
           <div
             className="
               w-full
-              max-w-4xl
-              mx-auto
               flex
               flex-col
               gap-3
-              sm:gap-4
+              md:gap-4
+              flex-grow
             "
           >
             {[
@@ -150,7 +154,14 @@ export default function FormComponet({
                 type: "text",
               },
             ].map((field) => (
-              <div key={field.name} className="flex flex-col">
+              <div
+                key={field.name}
+                className="
+                  w-full
+                  flex
+                  flex-col
+                "
+              >
                 <Field
                   name={field.name}
                   type={field.type}
@@ -158,56 +169,81 @@ export default function FormComponet({
                   placeholder={field.placeholder}
                   className="
                     w-full
+                    min-w-0
+
                     border-y-2
-                    border-black
                     bg-white
+
                     text-lg
                     sm:text-xl
                     md:text-2xl
-                    lg:text-3xl
-                    py-2.5
-                    sm:py-3
+                    xl:text-3xl
+
+                    py-2
                     px-3
+
                     outline-none
-                    focus:bg-gray-50
-                    transition
                   "
                 />
 
-                {touched[field.name as keyof typeof touched] &&
-                  errors[field.name as keyof typeof errors] && (
-                    <p className="px-3 pt-1 text-red-600 text-xs sm:text-sm">
-                      {(errors as any)[field.name]}
-                    </p>
-                  )}
+                <p
+                  className="
+                    min-h-[18px]
+                    px-3
+                    text-red-600
+                    text-xs
+                    md:text-sm
+                  "
+                >
+                  {(errors as any)[field.name]}
+                </p>
               </div>
             ))}
 
             {/* Restricciones alimenticias */}
-            <div className="flex flex-col">
+            <div
+              className="
+                w-full
+                flex
+                flex-col
+              "
+            >
               <Field
                 as="textarea"
                 name="restricciones_alimenticias"
                 placeholder="Restricciones alimenticias"
-                rows={3}
+                rows={2}
                 className="
                   w-full
+                  min-w-0
+
                   border-y-2
-                  border-black
                   bg-white
+
                   text-lg
                   sm:text-xl
                   md:text-2xl
-                  lg:text-3xl
-                  py-2.5
-                  sm:py-3
+                  xl:text-3xl
+
+                  py-2
                   px-3
-                  outline-none
+
                   resize-none
-                  focus:bg-gray-50
-                  transition
+                  outline-none
                 "
               />
+
+              <p
+                className="
+                  min-h-[18px]
+                  px-3
+                  text-red-600
+                  text-xs
+                  md:text-sm
+                "
+              >
+                {errors.restricciones_alimenticias}
+              </p>
             </div>
           </div>
 
@@ -215,31 +251,36 @@ export default function FormComponet({
           <div
             className="
               w-full
-              max-w-4xl
-              mx-auto
-              mt-8
-              sm:mt-10
-              lg:mt-12
+
+              mt-4
+              pt-4
+
               flex
               flex-col
-              lg:flex-row
-              lg:items-end
-              gap-6
-              lg:gap-10
-              pb-4
+              md:flex-row
+
+              gap-5
+
+              md:items-center
+
+              font-formaMicro
             "
           >
             {/* Privacidad */}
             <div
               className="
-                flex-1
-                text-[11px]
+                w-full
+                md:flex-1
+
+                text-[10px]
                 sm:text-xs
-                md:text-sm
-                leading-relaxed
+                lg:text-sm
+
+                leading-snug
+
                 flex
                 flex-col
-                gap-3
+                gap-2
               "
             >
               <p>
@@ -255,15 +296,13 @@ export default function FormComponet({
                 para conocer cómo HP consigue y hace uso de sus datos personales.
               </p>
 
-              <label className="flex items-start gap-2 cursor-pointer">
+              <label className="flex items-start gap-2">
                 <Field
                   type="checkbox"
                   name="email_contact"
                   className="
-                    mt-1
+                    mt-[2px]
                     shrink-0
-                    w-4
-                    h-4
                   "
                 />
 
@@ -274,15 +313,13 @@ export default function FormComponet({
                 </span>
               </label>
 
-              <label className="flex items-start gap-2 cursor-pointer">
+              <label className="flex items-start gap-2">
                 <Field
                   type="checkbox"
                   name="phone_contact"
                   className="
-                    mt-1
+                    mt-[2px]
                     shrink-0
-                    w-4
-                    h-4
                   "
                 />
 
@@ -299,19 +336,28 @@ export default function FormComponet({
               disabled={isSubmitting}
               className={`
                 w-full
-                sm:w-auto
-                lg:min-w-[150px]
-                px-8
-                py-4
+                sm:w-1/2
+                md:w-auto
+
+                md:min-w-[130px]
+
+                mx-auto
+                md:mx-0
+
+                px-6
+                py-3
+
                 text-base
-                sm:text-lg
-                lg:text-xl
+                md:text-lg
+
                 rounded
-                transition
+
+                shrink-0
+
                 ${
                   isSubmitting
                     ? "bg-gray-500 text-white cursor-not-allowed"
-                    : "bg-black text-white hover:bg-gray-800"
+                    : "bg-black text-white"
                 }
               `}
             >

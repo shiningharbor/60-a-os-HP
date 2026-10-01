@@ -12,70 +12,58 @@ function Home() {
       {!enviado ? (
         <main
           className="
-            min-h-screen
             w-full
+            min-h-screen
+            md:h-screen
             flex
             flex-col
-            lg:flex-row
-            bg-white
+            md:flex-row
+            overflow-x-hidden
+            md:overflow-hidden
           "
         >
-          {/* Imagen */}
+          {/* Imagen izquierda */}
           <section
             className="
-              relative
               w-full
-              h-[220px]
-              sm:h-[300px]
-              md:h-[360px]
-              lg:h-screen
-              lg:w-1/3
-              xl:w-[38%]
+              md:w-1/3
+              md:h-screen
               shrink-0
               overflow-hidden
+              flex
+              items-center
+              justify-center
             "
           >
-            <Image
+            <img
               src="/BG.png"
               alt="HP background"
-              fill
-              priority
-              sizes="
-                (max-width: 1024px) 100vw,
-                38vw
-              "
               className="
-                object-cover
-                object-center
+                w-full
+                h-auto
+                md:w-full
+                md:h-full
+                md:object-cover
+                block
               "
             />
           </section>
 
           {/* Formulario */}
-          <section
-            className="
-              w-full
-              lg:w-2/3
-              xl:w-[62%]
-              flex
-              justify-center
-            "
-          >
-            <FormComponet setEnviado={setEnviado} />
-          </section>
+          <FormComponet setEnviado={setEnviado} />
         </main>
       ) : (
         <main
           className="
             min-h-screen
+            w-full
+            overflow-hidden
             flex
             flex-col
             justify-center
             px-6
             sm:px-10
-            md:px-16
-            lg:px-20
-            xl:px-28
+            md:px-20
             py-10
             font-formaMicro
           "
@@ -107,11 +95,10 @@ function Home() {
               width={400}
               height={200}
               className="
-                w-40
-                sm:w-52
-                md:w-64
-                lg:w-72
-                xl:w-80
+                w-48
+                sm:w-64
+                md:w-72
+                lg:w-80
                 h-auto
               "
               priority
@@ -119,36 +106,47 @@ function Home() {
           </div>
 
           {/* Texto */}
-          <div className="w-full max-w-5xl">
+          <div className="w-full max-w-4xl">
             <h1
               className="
                 font-formaDisplay
                 text-3xl
-                sm:text-4xl
-                md:text-6xl
-                lg:text-7xl
-                xl:text-8xl
+                sm:text-5xl
+                md:text-7xl
+                lg:text-8xl
                 text-black
-                leading-[1.05]
-                mb-5
+                leading-tight
+                mb-4
               "
             >
-              60 AÑOS
+              Lanzamiento SMB
               <br />
-              Innovando para el futuro en México
+              Elite Partner Program
             </h1>
 
+            <h3
+              className="
+                text-lg
+                sm:text-xl
+                md:text-5xl
+                font-bold
+                text-[#1e49cf]
+                mb-4
+                leading-relaxed
+              "
+            >
+              Austin Texas
+            </h3>
 
             <h2
               className="
                 font-formaDisplay
                 text-4xl
                 sm:text-5xl
-                md:text-6xl
-                lg:text-7xl
-                xl:text-8xl
+                md:text-7xl
+                lg:text-8xl
                 text-black
-                leading-[1.05]
+                leading-tight
               "
             >
               ¡Tu registro
