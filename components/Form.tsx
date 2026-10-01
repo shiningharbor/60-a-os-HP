@@ -2,14 +2,13 @@ import db from "@/db/firebase"
 import { addDoc, collection } from "firebase/firestore"
 import { Field, Form, Formik } from "formik"
 import { Dispatch, SetStateAction } from "react"
-import * as Yup from 'yup'
+import * as Yup from "yup"
 
 export default function FormComponet({
   setEnviado,
 }: {
   setEnviado: Dispatch<SetStateAction<boolean>>
 }) {
-
   const registerSchema = Yup.object().shape({
     nombre: Yup.string()
       .min(2, "Escribe un nombre más largo")
@@ -31,80 +30,125 @@ export default function FormComponet({
     empresa: Yup.string().required("Este campo es requerido"),
     cargo: Yup.string().required("Este campo es requerido"),
 
-    // Campo abierto y opcional
     restricciones_alimenticias: Yup.string(),
   })
 
   return (
     <Formik
       initialValues={{
-        nombre: '',
-        apellidos: '',
-        correo: '',
-        telefono: '',
-        empresa: '',
-        cargo: '',
-        pais: '',
-        restricciones_alimenticias: '',
+        nombre: "",
+        apellidos: "",
+        correo: "",
+        telefono: "",
+        empresa: "",
+        cargo: "",
+        pais: "",
+        restricciones_alimenticias: "",
         email_contact: false,
         phone_contact: false,
       }}
       validationSchema={registerSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        await addDoc(collection(db, 'HP-SMB'), {
-          fecha: Date.now(),
-          ...values,
-        })
-
         try {
-          await fetch('/api', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              to: values.correo,
-              subject: 'Registro exitoso. Te esperamos.',
-              text: 'HP',
-            }),
+          await addDoc(collection(db, "HP-SMB"), {
+            fecha: Date.now(),
+            ...values,
           })
-        } catch (error) {
-          console.log(error)
-        }
 
-        resetForm()
-        setSubmitting(false)
-        setEnviado(true)
+          try {
+            await fetch("/api", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                to: values.correo,
+                subject: "Registro exitoso. Te esperamos.",
+                text: "HP",
+              }),
+            })
+          } catch (error) {
+            console.log(error)
+          }
+
+          resetForm()
+          setEnviado(true)
+        } catch (error) {
+          console.error("Error al guardar registro:", error)
+        } finally {
+          setSubmitting(false)
+        }
       }}
     >
-      {({ errors, isSubmitting }) => (
+      {({ errors, touched, isSubmitting }) => (
         <Form
           className="
-            flex flex-col
-            pt-6
-            px-4
-            md:px-0
-            md:w-2/3
+            w-full
+            lg:w-2/3
             min-h-screen
-            h-auto
+            flex
+            flex-col
+            justify-between
             font-formaMicro
+            px-5
+            sm:px-8
+            md:px-10
+            lg:px-12
+            xl:px-16
+            py-6
+            sm:py-8
+            lg:py-10
           "
         >
-
           {/* Campos */}
-          <div className="flex flex-col gap-4 flex-grow">
-
+          <div
+            className="
+              w-full
+              max-w-4xl
+              mx-auto
+              flex
+              flex-col
+              gap-3
+              sm:gap-4
+            "
+          >
             {[
-              { name: 'nombre', placeholder: 'Nombre', type: 'text' },
-              { name: 'apellidos', placeholder: 'Apellidos', type: 'text' },
-              { name: 'correo', placeholder: 'Correo', type: 'email' },
               {
-                name: 'telefono',
-                placeholder: 'Teléfono',
-                type: 'tel',
-                inputMode: 'numeric',
+                name: "nombre",
+                placeholder: "Nombre",
+                type: "text",
               },
-              { name: 'empresa', placeholder: 'Organización', type: 'text' },
-              { name: 'cargo', placeholder: 'Cargo', type: 'text' },
-              { name: 'pais', placeholder: 'País', type: 'text' },
+              {
+                name: "apellidos",
+                placeholder: "Apellidos",
+                type: "text",
+              },
+              {
+                name: "correo",
+                placeholder: "Correo",
+                type: "email",
+              },
+              {
+                name: "telefono",
+                placeholder: "Teléfono",
+                type: "tel",
+                inputMode: "numeric",
+              },
+              {
+                name: "empresa",
+                placeholder: "Organización",
+                type: "text",
+              },
+              {
+                name: "cargo",
+                placeholder: "Cargo",
+                type: "text",
+              },
+              {
+                name: "pais",
+                placeholder: "País",
+                type: "text",
+              },
             ].map((field) => (
               <div key={field.name} className="flex flex-col">
                 <Field
@@ -112,12 +156,30 @@ export default function FormComponet({
                   type={field.type}
                   inputMode={(field as any).inputMode}
                   placeholder={field.placeholder}
-                  className="border-y-2 bg-white text-2xl md:text-3xl py-2 px-3"
+                  className="
+                    w-full
+                    border-y-2
+                    border-black
+                    bg-white
+                    text-lg
+                    sm:text-xl
+                    md:text-2xl
+                    lg:text-3xl
+                    py-2.5
+                    sm:py-3
+                    px-3
+                    outline-none
+                    focus:bg-gray-50
+                    transition
+                  "
                 />
 
-                <p className="px-3 text-red-600 text-sm">
-                  {(errors as any)[field.name]}
-                </p>
+                {touched[field.name as keyof typeof touched] &&
+                  errors[field.name as keyof typeof errors] && (
+                    <p className="px-3 pt-1 text-red-600 text-xs sm:text-sm">
+                      {(errors as any)[field.name]}
+                    </p>
+                  )}
               </div>
             ))}
 
@@ -128,60 +190,130 @@ export default function FormComponet({
                 name="restricciones_alimenticias"
                 placeholder="Restricciones alimenticias"
                 rows={3}
-                className="border-y-2 bg-white text-2xl md:text-3xl py-2 px-3 resize-none"
+                className="
+                  w-full
+                  border-y-2
+                  border-black
+                  bg-white
+                  text-lg
+                  sm:text-xl
+                  md:text-2xl
+                  lg:text-3xl
+                  py-2.5
+                  sm:py-3
+                  px-3
+                  outline-none
+                  resize-none
+                  focus:bg-gray-50
+                  transition
+                "
               />
-
-              <p className="px-3 text-red-600 text-sm">
-                {errors.restricciones_alimenticias}
-              </p>
             </div>
-
           </div>
 
           {/* Footer */}
-          <div className="bg-[linear-gradient(110deg,_#ffffff_75%)] rounded py-5 md:px-10 my-0 flex md:flex-row flex-col font-formaMicro md:h-1/4">
-            <div className="text-[.6rem] lg:text-sm w-4/5 flex flex-col md:justify-center mx-auto">
+          <div
+            className="
+              w-full
+              max-w-4xl
+              mx-auto
+              mt-8
+              sm:mt-10
+              lg:mt-12
+              flex
+              flex-col
+              lg:flex-row
+              lg:items-end
+              gap-6
+              lg:gap-10
+              pb-4
+            "
+          >
+            {/* Privacidad */}
+            <div
+              className="
+                flex-1
+                text-[11px]
+                sm:text-xs
+                md:text-sm
+                leading-relaxed
+                flex
+                flex-col
+                gap-3
+              "
+            >
               <p>
-                HP respeta su privacidad. Visite la{' '}
+                HP respeta su privacidad. Visite la{" "}
                 <a
                   href="https://www.hp.com/mx-es/privacy/privacy.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="border-b border-black"
                 >
                   Declaración de privacidad de HP
-                </a>{' '}
+                </a>{" "}
                 para conocer cómo HP consigue y hace uso de sus datos personales.
               </p>
 
-              <label>
+              <label className="flex items-start gap-2 cursor-pointer">
                 <Field
                   type="checkbox"
                   name="email_contact"
-                  className="mr-2"
+                  className="
+                    mt-1
+                    shrink-0
+                    w-4
+                    h-4
+                  "
                 />
-                HP me puede contactar para enviarme ofertas personalizadas,
-                información de soporte y noticias de eventos por correo
-                electrónico.
+
+                <span>
+                  HP me puede contactar para enviarme ofertas personalizadas,
+                  información de soporte y noticias de eventos por correo
+                  electrónico.
+                </span>
               </label>
 
-              <label>
+              <label className="flex items-start gap-2 cursor-pointer">
                 <Field
                   type="checkbox"
                   name="phone_contact"
-                  className="mr-2"
+                  className="
+                    mt-1
+                    shrink-0
+                    w-4
+                    h-4
+                  "
                 />
-                HP me puede contactar para enviarme ofertas personalizadas,
-                información de soporte y noticias de eventos por teléfono.
+
+                <span>
+                  HP me puede contactar para enviarme ofertas personalizadas,
+                  información de soporte y noticias de eventos por teléfono.
+                </span>
               </label>
             </div>
 
+            {/* Botón */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`ml-auto text-xl rounded p-5 h-3/5 md:w-1/6 w-1/2 mx-auto ${
-                isSubmitting
-                  ? "bg-gray-500 text-white cursor-not-allowed"
-                  : "bg-black text-white"
-              }`}
+              className={`
+                w-full
+                sm:w-auto
+                lg:min-w-[150px]
+                px-8
+                py-4
+                text-base
+                sm:text-lg
+                lg:text-xl
+                rounded
+                transition
+                ${
+                  isSubmitting
+                    ? "bg-gray-500 text-white cursor-not-allowed"
+                    : "bg-black text-white hover:bg-gray-800"
+                }
+              `}
             >
               {isSubmitting ? "Enviando..." : "Enviar"}
             </button>
