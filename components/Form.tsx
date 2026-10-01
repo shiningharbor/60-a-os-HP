@@ -11,13 +11,28 @@ export default function FormComponet({
 }) {
 
   const registerSchema = Yup.object().shape({
-    nombre: Yup.string().min(2, "Escribe un nombre más largo").required("Este campo es requerido"),
-    apellidos: Yup.string().min(2, "Escribe un apellido más largo").required("Este campo es requerido"),
-    correo: Yup.string().email("Correo inválido").required("Este campo es requerido"),
-    telefono: Yup.string().matches(/^\d{10}$/, "Debe contener 10 dígitos").required("Este campo es requerido"),
+    nombre: Yup.string()
+      .min(2, "Escribe un nombre más largo")
+      .required("Este campo es requerido"),
+
+    apellidos: Yup.string()
+      .min(2, "Escribe un apellido más largo")
+      .required("Este campo es requerido"),
+
+    correo: Yup.string()
+      .email("Correo inválido")
+      .required("Este campo es requerido"),
+
+    telefono: Yup.string()
+      .matches(/^\d{10}$/, "Debe contener 10 dígitos")
+      .required("Este campo es requerido"),
+
     pais: Yup.string().required("Este campo es requerido"),
     empresa: Yup.string().required("Este campo es requerido"),
     cargo: Yup.string().required("Este campo es requerido"),
+
+    // Campo abierto y opcional
+    restricciones_alimenticias: Yup.string(),
   })
 
   return (
@@ -30,6 +45,7 @@ export default function FormComponet({
         empresa: '',
         cargo: '',
         pais: '',
+        restricciones_alimenticias: '',
         email_contact: false,
         phone_contact: false,
       }}
@@ -80,7 +96,12 @@ export default function FormComponet({
               { name: 'nombre', placeholder: 'Nombre', type: 'text' },
               { name: 'apellidos', placeholder: 'Apellidos', type: 'text' },
               { name: 'correo', placeholder: 'Correo', type: 'email' },
-              { name: 'telefono', placeholder: 'Teléfono', type: 'tel', inputMode: 'numeric' },
+              {
+                name: 'telefono',
+                placeholder: 'Teléfono',
+                type: 'tel',
+                inputMode: 'numeric',
+              },
               { name: 'empresa', placeholder: 'Organización', type: 'text' },
               { name: 'cargo', placeholder: 'Cargo', type: 'text' },
               { name: 'pais', placeholder: 'País', type: 'text' },
@@ -93,39 +114,74 @@ export default function FormComponet({
                   placeholder={field.placeholder}
                   className="border-y-2 bg-white text-2xl md:text-3xl py-2 px-3"
                 />
+
                 <p className="px-3 text-red-600 text-sm">
                   {(errors as any)[field.name]}
                 </p>
               </div>
             ))}
+
+            {/* Restricciones alimenticias */}
+            <div className="flex flex-col">
+              <Field
+                as="textarea"
+                name="restricciones_alimenticias"
+                placeholder="Restricciones alimenticias"
+                rows={3}
+                className="border-y-2 bg-white text-2xl md:text-3xl py-2 px-3 resize-none"
+              />
+
+              <p className="px-3 text-red-600 text-sm">
+                {errors.restricciones_alimenticias}
+              </p>
+            </div>
+
           </div>
 
           {/* Footer */}
           <div className="bg-[linear-gradient(110deg,_#ffffff_75%)] rounded py-5 md:px-10 my-0 flex md:flex-row flex-col font-formaMicro md:h-1/4">
             <div className="text-[.6rem] lg:text-sm w-4/5 flex flex-col md:justify-center mx-auto">
-              <p>HP respeta su privacidad. Visite la {' '}
-                <a href="https://www.hp.com/mx-es/privacy/privacy.html" className="border-b border-black">
+              <p>
+                HP respeta su privacidad. Visite la{' '}
+                <a
+                  href="https://www.hp.com/mx-es/privacy/privacy.html"
+                  className="border-b border-black"
+                >
                   Declaración de privacidad de HP
-                </a> para conocer cómo HP consigue y hace uso de sus datos personales.
+                </a>{' '}
+                para conocer cómo HP consigue y hace uso de sus datos personales.
               </p>
 
               <label>
-                <Field type="checkbox" name="email_contact" className="mr-2" />
-                HP me puede contactar para enviarme ofertas personalizadas, información de soporte y noticias de eventos por correo electrónico.
+                <Field
+                  type="checkbox"
+                  name="email_contact"
+                  className="mr-2"
+                />
+                HP me puede contactar para enviarme ofertas personalizadas,
+                información de soporte y noticias de eventos por correo
+                electrónico.
               </label>
+
               <label>
-                <Field type="checkbox" name="phone_contact" className="mr-2" />
-                HP me puede contactar para enviarme ofertas personalizadas, información de soporte y noticias de eventos por teléfono.
+                <Field
+                  type="checkbox"
+                  name="phone_contact"
+                  className="mr-2"
+                />
+                HP me puede contactar para enviarme ofertas personalizadas,
+                información de soporte y noticias de eventos por teléfono.
               </label>
-              {/* <br /> */}
             </div>
+
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`ml-auto text-xl rounded p-5 h-3/5 md:w-1/6 w-1/2 mx-auto ${isSubmitting
+              className={`ml-auto text-xl rounded p-5 h-3/5 md:w-1/6 w-1/2 mx-auto ${
+                isSubmitting
                   ? "bg-gray-500 text-white cursor-not-allowed"
                   : "bg-black text-white"
-                }`}
+              }`}
             >
               {isSubmitting ? "Enviando..." : "Enviar"}
             </button>
