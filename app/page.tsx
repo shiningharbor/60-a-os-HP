@@ -88,22 +88,22 @@ function Home() {
           }}
         >
           {/* Logo */}
-          <div className="mb-8 md:mb-10">
-            <Image
-              src="/Logo.png"
-              alt="ACF Logo"
-              width={400}
-              height={200}
-              className="
-                w-48
-                sm:w-64
-                md:w-72
-                lg:w-80
-                h-auto
-              "
-              priority
-            />
-          </div>
+<div className="mb-8 md:mb-10">
+  <Image
+    src="/Logo.png"
+    alt="ACF Logo"
+    width={200}
+    height={100}
+    className="
+      w-16
+      sm:w-20
+      md:w-24
+      lg:w-28
+      h-auto
+    "
+    priority
+  />
+</div>
 
           {/* Texto */}
           <div className="w-full max-w-4xl">
@@ -114,29 +114,29 @@ function Home() {
                 sm:text-5xl
                 md:text-7xl
                 lg:text-8xl
-                text-black
+                text-[#1e49cf]
                 leading-tight
                 mb-4
               "
             >
-              Lanzamiento SMB
-              <br />
-              Elite Partner Program
+              60 Años
             </h1>
 
-            <h3
+            <h2
               className="
                 text-lg
                 sm:text-xl
                 md:text-5xl
                 font-bold
-                text-[#1e49cf]
+                text-black
                 mb-4
                 leading-relaxed
               "
             >
-              Austin Texas
-            </h3>
+              Innovando para
+              <br/>
+              el futuro de México
+            </h2>
 
             <h2
               className="
