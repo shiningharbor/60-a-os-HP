@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Registro",
+  title: "60 años HP",
   description: "Registro HP",
 };
 

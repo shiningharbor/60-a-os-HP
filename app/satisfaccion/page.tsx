@@ -1,8 +1,9 @@
+
 "use client"
 
-import SatisfactionForm from "@/components/SatisfactionForm"
-import Image from "next/image"
 import { useState } from "react"
+import Image from "next/image"
+import SatisfactionForm from "../../components/SatisfactionForm"
 
 export default function SatisfaccionPage() {
   const [enviado, setEnviado] = useState(false)
@@ -39,12 +40,15 @@ export default function SatisfaccionPage() {
           <h1 className="font-formaDisplay text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-[#1e49cf] leading-tight mb-4">
             60 Años
           </h1>
+
           <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-black mb-5 leading-relaxed">
             Innovando para el futuro de México
           </h2>
+
           <h2 className="font-formaDisplay text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-black leading-tight">
             ¡Gracias por compartir tu experiencia!
           </h2>
+
           <p className="mt-6 max-w-xl text-lg md:text-xl text-neutral-700">
             Tus respuestas se enviaron correctamente.
           </p>
