@@ -136,9 +136,6 @@ const secciones = [
 // ====================================
 
 const initialValues = {
-  nombre: "",
-  empresa: "",
-
   agilidad_acceso: "",
   atencion_recepcion: "",
   asignacion_mesas: "",
@@ -165,14 +162,6 @@ const requiredResponse = Yup.string().required(
 )
 
 const validationSchema = Yup.object({
-  nombre: Yup.string()
-    .trim()
-    .required("Ingresa tu nombre"),
-
-  empresa: Yup.string()
-    .trim()
-    .required("Ingresa tu empresa"),
-
   agilidad_acceso: requiredResponse,
   atencion_recepcion: requiredResponse,
   asignacion_mesas: requiredResponse,
@@ -269,67 +258,6 @@ export default function SatisfactionForm({
             submitCount,
           }) => (
             <Form noValidate>
-
-              {/* DATOS DEL ASISTENTE */}
-
-              <div className="mb-10">
-                <h3 className="font-formaDisplay text-2xl sm:text-3xl text-[#1e49cf] mb-5">
-                  Datos del asistente
-                </h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-
-                  {/* NOMBRE */}
-
-                  <div>
-                    <label
-                      htmlFor="nombre"
-                      className="block text-sm font-semibold text-black mb-2"
-                    >
-                      Nombre completo
-                    </label>
-
-                    <Field
-                      id="nombre"
-                      name="nombre"
-                      type="text"
-                      placeholder="Escribe tu nombre"
-                      className="w-full rounded-lg border border-neutral-300 px-4 py-3 text-black bg-white outline-none focus:border-[#1e49cf] focus:ring-2 focus:ring-blue-100 transition"
-                    />
-
-                    {touched.nombre && errors.nombre && (
-                      <p className="text-red-600 text-xs mt-2">
-                        {errors.nombre}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* EMPRESA */}
-
-                  <div>
-                    <label
-                      htmlFor="empresa"
-                      className="block text-sm font-semibold text-black mb-2"
-                    >
-                      Empresa
-                    </label>
-
-                    <Field
-                      id="empresa"
-                      name="empresa"
-                      type="text"
-                      placeholder="Escribe tu empresa"
-                      className="w-full rounded-lg border border-neutral-300 px-4 py-3 text-black bg-white outline-none focus:border-[#1e49cf] focus:ring-2 focus:ring-blue-100 transition"
-                    />
-
-                    {touched.empresa && errors.empresa && (
-                      <p className="text-red-600 text-xs mt-2">
-                        {errors.empresa}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
 
               {/* SECCIONES DE SATISFACCIÓN */}
 
