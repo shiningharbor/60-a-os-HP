@@ -1,183 +1,69 @@
-"use client";
+"use client"
 
-import db from "@/db/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { useState } from "react";
-import * as XLSX from "xlsx";
+import SatisfactionForm from "@/components/SatisfactionForm"
+import Image from "next/image"
+import { useState } from "react"
 
-interface register {
-    id: string;
-    nombre: string;
-    apellidos: string;
-    empresa: string;
-    cargo: string;
-    correo: string;
-    telefono: number;
-    fecha?: number | string;
-    restricciones_alimenticias?: string;
-}
+export default function SatisfaccionPage() {
+  const [enviado, setEnviado] = useState(false)
 
-export default function Registers() {
-
-    const [registers, setRegisters] = useState<register[]>([]);
-
-    const getRegisters = async (collectionName: string) => {
-        try {
-            const userCollection = collection(db, collectionName);
-            const userDocs = await getDocs(userCollection);
-
-            const registerList = userDocs.docs.map((doc) => {
-                const {
-                    nombre,
-                    apellidos,
-                    empresa,
-                    cargo,
-                    correo,
-                    telefono,
-                    fecha,
-                    restricciones_alimenticias
-                } = doc.data();
-
-                const fechaMod = fecha
-                    ? new Date(fecha).toISOString().split("T")[0]
-                    : "";
-
-                return {
-                    id: doc.id,
-                    nombre,
-                    apellidos,
-                    empresa,
-                    cargo,
-                    correo,
-                    telefono,
-                    fecha: fechaMod,
-                    restricciones_alimenticias: restricciones_alimenticias ?? ""
-                };
-            }) as register[];
-
-            console.log(registerList);
-            setRegisters(registerList);
-
-        } catch (error) {
-            console.error("Error al obtener los registros:", error);
-        }
-    };
-
-    const getExcel = () => {
-        // Convertir los registros a una hoja de Excel
-        const ws = XLSX.utils.json_to_sheet(registers);
-
-        // Crear libro de Excel
-        const wb = XLSX.utils.book_new();
-
-        // Agregar hoja al libro
-        XLSX.utils.book_append_sheet(wb, ws, "Datos");
-
-        // Descargar archivo Excel
-        XLSX.writeFile(wb, "Reporte.xlsx");
-    };
-
+  if (enviado) {
     return (
-        <main className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-            <div className="w-full max-w-6xl text-left text-sm my-3">
+      <main
+        className="min-h-screen w-full overflow-hidden flex flex-col justify-center px-6 sm:px-10 md:px-20 py-10 font-formaMicro"
+        style={{
+          backgroundImage: `linear-gradient(
+            110deg,
+            #ffffff 0%, #ffffff 72%,
+            #1e49cf 72%, #1e49cf 80%,
+            #ffffff 80%, #ffffff 88%,
+            #1e49cf 88%, #1e49cf 96%,
+            #ffffff 96%, #ffffff 100%
+          )`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+      >
+        <div className="mb-8 md:mb-10">
+          <Image
+            src="/Logo.png"
+            alt="Logo del evento"
+            width={200}
+            height={100}
+            className="w-16 sm:w-20 md:w-24 lg:w-28 h-auto"
+            priority
+          />
+        </div>
 
-                {registers.length > 0 ? (
-                    <div className="w-full overflow-x-auto">
-                        <table className="table-auto border-collapse border border-black bg-white shadow-lg w-full">
-                            <thead className="text-lg text-center bg-gray-200">
-                                <tr>
-                                    <th className="border border-black p-2">
-                                        ID
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Nombre
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Apellido
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Organización
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Cargo
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Correo
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Teléfono
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Fecha
-                                    </th>
-                                    <th className="border border-black p-2">
-                                        Restricciones alimenticias
-                                    </th>
-                                </tr>
-                            </thead>
+        <div className="w-full max-w-4xl">
+          <h1 className="font-formaDisplay text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-[#1e49cf] leading-tight mb-4">
+            60 Años
+          </h1>
+          <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-black mb-5 leading-relaxed">
+            Innovando para el futuro de México
+          </h2>
+          <h2 className="font-formaDisplay text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-black leading-tight">
+            ¡Gracias por compartir tu experiencia!
+          </h2>
+          <p className="mt-6 max-w-xl text-lg md:text-xl text-neutral-700">
+            Tus respuestas se enviaron correctamente.
+          </p>
+        </div>
+      </main>
+    )
+  }
 
-                            <tbody>
-                                {registers.map((reg) => (
-                                    <tr
-                                        key={reg.id}
-                                        className="text-center hover:bg-gray-50"
-                                    >
-                                        <td className="border border-black p-2">
-                                            {reg.id}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.nombre}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.apellidos}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.empresa}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.cargo}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.correo}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.telefono}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.fecha}
-                                        </td>
-                                        <td className="border border-black p-2">
-                                            {reg.restricciones_alimenticias || "Ninguna"}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                ) : (
-                    <p className="text-3xl text-center m-10">
-                        Aún no hay registros
-                    </p>
-                )}
+  return (
+    <main className="w-full min-h-screen md:h-screen flex flex-col md:flex-row overflow-x-hidden md:overflow-hidden">
+      <section className="w-full md:w-1/3 md:h-screen shrink-0 overflow-hidden flex items-center justify-center">
+        <img
+          src="/BG.png"
+          alt="HP 60 años"
+          className="w-full h-48 object-cover md:w-full md:h-full md:object-cover block"
+        />
+      </section>
 
-                <div className="flex justify-center my-5 gap-5">
-                    <button
-                        className="h-10 px-5 bg-yellow-200 rounded-xl text-black text-xl hover:bg-yellow-300"
-                        onClick={() => getRegisters("HP-60")}
-                    >
-                        Registros
-                    </button>
-
-                    {registers.length > 0 && (
-                        <button
-                            className="h-10 px-5 bg-yellow-200 rounded-xl text-black text-xl hover:bg-yellow-300"
-                            onClick={getExcel}
-                        >
-                            Exportar a Excel
-                        </button>
-                    )}
-                </div>
-            </div>
-        </main>
-    );
+      <SatisfactionForm setEnviado={setEnviado} />
+    </main>
+  )
 }
